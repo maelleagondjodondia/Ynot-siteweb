@@ -1,0 +1,40 @@
+-- Table pour les admins
+CREATE TABLE admins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,  -- date de création
+    member_id INTEGER,                         -- relation optionnelle avec un membre
+    FOREIGN KEY (member_id) REFERENCES members(id)
+);
+
+-- Table pour les activités (événements + sports)
+CREATE TABLE activities (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    activity_date TEXT NOT NULL,
+    price REAL,
+    description TEXT,
+    image TEXT, 
+    pole TEXT NOT NULL,        -- 'event' ou 'sport'
+    admin_id INTEGER,          -- relation avec l'admin qui a créé l'event
+    FOREIGN KEY (admin_id) REFERENCES admins(id)
+);
+
+-- Table pour les membres du BDE
+CREATE TABLE members (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL,
+    pole TEXT NOT NULL,
+    image TEXT
+);
+
+-- Table pour les partenaires
+CREATE TABLE partners (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    address TEXT,          -- ajout de l'adresse
+    telephone TEXT,        -- ajout du téléphone
+    logo TEXT
+);
