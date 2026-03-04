@@ -39,7 +39,7 @@ require_once 'includes/header.php';
                 </a>
             </div>
             <div class="col-md-6 animate__animated animate__fadeInRight">
-                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop" 
+                <img src="bde.png" 
                      alt="Étudiants BDE" class="img-fluid">
             </div>
         </div>

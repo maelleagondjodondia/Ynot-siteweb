@@ -1,1 +1,3 @@
-database.sqlite
+*.sb-*
+uploads/*
+!uploads/.htaccess
