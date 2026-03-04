@@ -18,10 +18,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </head>
 <body>
 
+<!-- Mobile Toggle Button -->
+<button class="sidebar-toggle" id="sidebarToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <!-- Sidebar -->
-<nav class="admin-sidebar bg-dark text-white">
-    <div class="p-3">
+<nav class="admin-sidebar bg-dark text-white" id="adminSidebar">
+    <div class="p-3 d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><i class="fas fa-graduation-cap"></i> BDE Admin</h5>
+        <button class="sidebar-close d-lg-none" id="sidebarClose">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
     <ul class="nav flex-column flex-grow-1">
         <li class="nav-item">
