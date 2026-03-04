@@ -1,9 +1,10 @@
-<?php require_once '../includes/admin_header.php'; ?>
-
 <?php
+require_once '../includes/auth.php';
+requireAdmin();
+require_once '../includes/db.php';
+
 $action = $_GET['action'] ?? 'list';
 $id = intval($_GET['id'] ?? 0);
-$success = $_GET['success'] ?? '';
 
 // Suppression
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'delete') {
@@ -71,6 +72,9 @@ if ($action === 'edit' && $id) {
     $event = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$event) { header('Location: evenements.php'); exit; }
 }
+
+require_once '../includes/admin_header.php';
+$success = $_GET['success'] ?? '';
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-4">

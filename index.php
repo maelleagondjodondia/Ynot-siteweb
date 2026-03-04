@@ -59,38 +59,30 @@ require_once 'includes/header.php';
     </div>
 </section>
 
-<!-- Partenaires -->
+<!-- Partenaires (dynamique depuis la BDD) -->
+<?php $partners = $db->query("SELECT * FROM partners ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC); ?>
+<?php if (!empty($partners)): ?>
 <section class="partners-section">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold">Nos Partenaires</h2>
         <div class="row justify-content-center">
+            <?php foreach ($partners as $p): ?>
             <div class="col-md-2 col-6 text-center animate__animated animate__fadeIn">
                 <div class="partner-logo">
-                    <i class="fas fa-building fa-3x text-primary"></i>
-                    <p class="mt-2 mb-0 fw-bold">Partenaire 1</p>
+                    <?php if ($p['logo']): ?>
+                        <img src="<?= htmlspecialchars($p['logo']) ?>" alt="<?= htmlspecialchars($p['name']) ?>"
+                             style="width: 60px; height: 60px; object-fit: contain;">
+                    <?php else: ?>
+                        <i class="fas fa-handshake fa-3x text-primary"></i>
+                    <?php endif; ?>
+                    <p class="mt-2 mb-0 fw-bold"><?= htmlspecialchars($p['name']) ?></p>
                 </div>
             </div>
-            <div class="col-md-2 col-6 text-center animate__animated animate__fadeIn">
-                <div class="partner-logo">
-                    <i class="fas fa-store fa-3x text-success"></i>
-                    <p class="mt-2 mb-0 fw-bold">Partenaire 2</p>
-                </div>
-            </div>
-            <div class="col-md-2 col-6 text-center animate__animated animate__fadeIn">
-                <div class="partner-logo">
-                    <i class="fas fa-utensils fa-3x text-danger"></i>
-                    <p class="mt-2 mb-0 fw-bold">Partenaire 3</p>
-                </div>
-            </div>
-            <div class="col-md-2 col-6 text-center animate__animated animate__fadeIn">
-                <div class="partner-logo">
-                    <i class="fas fa-coffee fa-3x text-warning"></i>
-                    <p class="mt-2 mb-0 fw-bold">Partenaire 4</p>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
+<?php endif; ?>
 
 <!-- Contact -->
 <section id="contact" class="py-5">

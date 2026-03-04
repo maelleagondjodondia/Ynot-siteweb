@@ -44,6 +44,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <i class="fas fa-users"></i> Membres
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link text-white <?= $current_page === 'partenaires.php' ? 'active' : '' ?>" href="partenaires.php">
+                <i class="fas fa-handshake"></i> Partenaires
+            </a>
+        </li>
     </ul>
     <div class="p-3">
         <a href="../index.php" class="btn btn-outline-light btn-sm w-100 mb-2">
