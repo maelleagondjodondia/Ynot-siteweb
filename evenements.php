@@ -68,8 +68,11 @@ function afficherSectionEvenements(array $events, string $titre, string $descrip
                 <?php foreach ($events as $event): ?>
                     <div class="col-md-4 mb-4 animate__animated animate__fadeIn">
                         <div class="event-card">
-                            <img src="<?= !empty($event['image']) ? htmlspecialchars($event['image']) : 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30' ?>"
-                                 alt="<?= htmlspecialchars($event['name']) ?>">
+                            <?php if (!empty($event['image'])): ?>
+                                <img src="<?= htmlspecialchars($event['image']) ?>" alt="<?= htmlspecialchars($event['name']) ?>">
+                            <?php else: ?>
+                                <div class="card-placeholder"><i class="fas fa-calendar-alt"></i></div>
+                            <?php endif; ?>
 
                             <div class="event-card-body">
                                 <p class="event-date mb-2">
@@ -108,9 +111,9 @@ function afficherSectionEvenements(array $events, string $titre, string $descrip
                                 </div>
 
                                 <div class="modal-body">
-                                    <img src="<?= !empty($event['image']) ? htmlspecialchars($event['image']) : 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30' ?>"
-                                         class="img-fluid rounded mb-3"
-                                         alt="<?= htmlspecialchars($event['name']) ?>">
+                                    <?php if (!empty($event['image'])): ?>
+                                        <img src="<?= htmlspecialchars($event['image']) ?>" class="img-fluid rounded mb-3" alt="<?= htmlspecialchars($event['name']) ?>">
+                                    <?php endif; ?>
 
                                     <p><strong>Date :</strong>
                                         <?= date('d/m/Y', strtotime($event['activity_date'])) ?>

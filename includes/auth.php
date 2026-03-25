@@ -15,21 +15,32 @@ function isAdmin(): bool {
 }
 
 function uploadImage(array $file, string $prefix = 'img'): string {
-    if (empty($file['name']) || $file['error'] !== UPLOAD_ERR_OK) {
+    // Pas de fichier envoyé
+    if (empty($file['name']) || $file['error'] === UPLOAD_ERR_NO_FILE) {
         return '';
     }
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        return '';
+    }
+
+    // Vérifier l'extension
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    if (!in_array($ext, $allowed)) {
+    $allowed = ['jpg' => 'jpeg', 'jpeg' => 'jpeg', 'png' => 'png', 'gif' => 'gif', 'webp' => 'webp'];
+    if (!isset($allowed[$ext])) {
         return '';
     }
-    if ($file['size'] > 2 * 1024 * 1024) {
+
+    // Vérifier la taille (5 MB max)
+    if ($file['size'] > 5 * 1024 * 1024) {
         return '';
     }
-    $filename = $prefix . '_' . uniqid() . '.' . $ext;
-    $destination = __DIR__ . '/../uploads/' . $filename;
-    if (move_uploaded_file($file['tmp_name'], $destination)) {
-        return 'uploads/' . $filename;
+
+    // Lire le fichier et convertir en base64 data URI
+    $data = file_get_contents($file['tmp_name']);
+    if ($data === false) {
+        return '';
     }
-    return '';
+
+    $mime = 'image/' . $allowed[$ext];
+    return 'data:' . $mime . ';base64,' . base64_encode($data);
 }

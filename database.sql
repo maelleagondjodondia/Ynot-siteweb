@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS members (
     name VARCHAR(200) NOT NULL,
     role VARCHAR(200) NOT NULL,
     pole VARCHAR(100) NOT NULL,
-    image VARCHAR(500) NULL
+    image LONGTEXT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Table des activités (événements + sports)
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS activities (
     activity_date DATE NOT NULL,
     price DECIMAL(10,2) NULL,
     description TEXT NULL,
-    image VARCHAR(500) NULL,
+    image LONGTEXT NULL,
     pole VARCHAR(50) NOT NULL COMMENT 'event ou sport',
     admin_id INT NULL,
     FOREIGN KEY (admin_id) REFERENCES admins(id) ON DELETE SET NULL
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS partners (
     name VARCHAR(200) NOT NULL,
     address VARCHAR(500) NULL,
     telephone VARCHAR(50) NULL,
-    logo VARCHAR(500) NULL
+    logo LONGTEXT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Table des contacts

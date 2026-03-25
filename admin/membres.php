@@ -11,12 +11,6 @@ $poles = ['Sport', 'Evenementiel', 'Communication', 'Partenaria'];
 // Suppression
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'delete') {
     $del_id = intval($_POST['id']);
-    $stmt = $db->prepare("SELECT image FROM members WHERE id = :id");
-    $stmt->execute(['id' => $del_id]);
-    $member = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($member && $member['image'] && file_exists('../' . $member['image'])) {
-        unlink('../' . $member['image']);
-    }
     $stmt = $db->prepare("DELETE FROM members WHERE id = :id");
     $stmt->execute(['id' => $del_id]);
     header('Location: membres.php?success=deleted');
@@ -44,12 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'edit') {
     $image_path = uploadImage($_FILES['image'] ?? [], 'member');
 
     if ($image_path) {
-        $stmt = $db->prepare("SELECT image FROM members WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $old = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($old && $old['image'] && file_exists('../' . $old['image'])) {
-            unlink('../' . $old['image']);
-        }
         $stmt = $db->prepare("UPDATE members SET name=:name, role=:role, pole=:pole, image=:image WHERE id=:id");
         $stmt->execute(['name' => $name, 'role' => $role, 'pole' => $pole, 'image' => $image_path, 'id' => $id]);
     } else {
@@ -121,7 +109,7 @@ $success = $_GET['success'] ?? '';
                 <input type="file" name="image" class="form-control" accept="image/*">
                 <?php if (!empty($member['image'])): ?>
                     <div class="mt-2">
-                        <img src="../<?= htmlspecialchars($member['image']) ?>" style="height: 80px; border-radius: 8px;">
+                        <img src="<?= htmlspecialchars($member['image']) ?>" style="height: 80px; border-radius: 8px;">
                         <small class="text-muted ms-2">Photo actuelle</small>
                     </div>
                 <?php endif; ?>
@@ -157,7 +145,7 @@ $success = $_GET['success'] ?? '';
                     <tr>
                         <td>
                             <?php if ($m['image']): ?>
-                                <img src="../<?= htmlspecialchars($m['image']) ?>">
+                                <img src="<?= htmlspecialchars($m['image']) ?>">
                             <?php else: ?>
                                 <img src="https://ui-avatars.com/api/?name=<?= urlencode($m['name']) ?>&background=2563eb&color=fff&size=50">
                             <?php endif; ?>

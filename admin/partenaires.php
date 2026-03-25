@@ -9,12 +9,6 @@ $id = intval($_GET['id'] ?? 0);
 // Suppression
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'delete') {
     $del_id = intval($_POST['id']);
-    $stmt = $db->prepare("SELECT logo FROM partners WHERE id = :id");
-    $stmt->execute(['id' => $del_id]);
-    $partner = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($partner && $partner['logo'] && file_exists('../' . $partner['logo'])) {
-        unlink('../' . $partner['logo']);
-    }
     $stmt = $db->prepare("DELETE FROM partners WHERE id = :id");
     $stmt->execute(['id' => $del_id]);
     header('Location: partenaires.php?success=deleted');
@@ -42,12 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'edit') {
     $logo_path = uploadImage($_FILES['logo'] ?? [], 'partner');
 
     if ($logo_path) {
-        $stmt = $db->prepare("SELECT logo FROM partners WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $old = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($old && $old['logo'] && file_exists('../' . $old['logo'])) {
-            unlink('../' . $old['logo']);
-        }
         $stmt = $db->prepare("UPDATE partners SET name=:name, address=:address, telephone=:telephone, logo=:logo WHERE id=:id");
         $stmt->execute(['name' => $name, 'address' => $address, 'telephone' => $telephone, 'logo' => $logo_path, 'id' => $id]);
     } else {
@@ -114,7 +102,7 @@ $success = $_GET['success'] ?? '';
                 <input type="file" name="logo" class="form-control" accept="image/*">
                 <?php if (!empty($partner['logo'])): ?>
                     <div class="mt-2">
-                        <img src="../<?= htmlspecialchars($partner['logo']) ?>" style="height: 80px; border-radius: 8px;">
+                        <img src="<?= htmlspecialchars($partner['logo']) ?>" style="height: 80px; border-radius: 8px;">
                         <small class="text-muted ms-2">Logo actuel</small>
                     </div>
                 <?php endif; ?>
@@ -150,7 +138,7 @@ $success = $_GET['success'] ?? '';
                     <tr>
                         <td>
                             <?php if ($p['logo']): ?>
-                                <img src="../<?= htmlspecialchars($p['logo']) ?>">
+                                <img src="<?= htmlspecialchars($p['logo']) ?>">
                             <?php else: ?>
                                 <div style="width:50px;height:50px;background:#e9ecef;border-radius:8px;display:flex;align-items:center;justify-content:center;">
                                     <i class="fas fa-handshake text-muted"></i>

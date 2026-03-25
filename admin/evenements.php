@@ -9,12 +9,6 @@ $id = intval($_GET['id'] ?? 0);
 // Suppression
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'delete') {
     $del_id = intval($_POST['id']);
-    $stmt = $db->prepare("SELECT image FROM activities WHERE id = :id AND pole = 'event'");
-    $stmt->execute(['id' => $del_id]);
-    $activity = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($activity && $activity['image'] && file_exists('../' . $activity['image'])) {
-        unlink('../' . $activity['image']);
-    }
     $stmt = $db->prepare("DELETE FROM activities WHERE id = :id AND pole = 'event'");
     $stmt->execute(['id' => $del_id]);
     header('Location: evenements.php?success=deleted');
@@ -48,12 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'edit') {
     $image_path = uploadImage($_FILES['image'] ?? [], 'event');
 
     if ($image_path) {
-        $stmt = $db->prepare("SELECT image FROM activities WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-        $old = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($old && $old['image'] && file_exists('../' . $old['image'])) {
-            unlink('../' . $old['image']);
-        }
         $stmt = $db->prepare("UPDATE activities SET name=:name, activity_date=:date, price=:price, description=:desc, image=:img WHERE id=:id AND pole='event'");
         $stmt->execute(['name' => $name, 'date' => $activity_date, 'price' => $price, 'desc' => $description, 'img' => $image_path, 'id' => $id]);
     } else {
@@ -125,7 +113,7 @@ $success = $_GET['success'] ?? '';
                 <input type="file" name="image" class="form-control" accept="image/*">
                 <?php if (!empty($event['image'])): ?>
                     <div class="mt-2">
-                        <img src="../<?= htmlspecialchars($event['image']) ?>" style="height: 80px; border-radius: 8px;">
+                        <img src="<?= htmlspecialchars($event['image']) ?>" style="height: 80px; border-radius: 8px;">
                         <small class="text-muted ms-2">Image actuelle</small>
                     </div>
                 <?php endif; ?>
@@ -162,7 +150,7 @@ $success = $_GET['success'] ?? '';
                     <tr>
                         <td>
                             <?php if ($ev['image']): ?>
-                                <img src="../<?= htmlspecialchars($ev['image']) ?>">
+                                <img src="<?= htmlspecialchars($ev['image']) ?>">
                             <?php else: ?>
                                 <div style="width:50px;height:50px;background:#e9ecef;border-radius:8px;display:flex;align-items:center;justify-content:center;">
                                     <i class="fas fa-image text-muted"></i>

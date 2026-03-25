@@ -58,7 +58,6 @@ $sportsPasses = $stmt->fetchAll(PDO::FETCH_ASSOC);
  */
 function afficherSectionSports(array $sports, string $titre, string $description, string $emptyTitle, string $emptyText): void
 {
-    $imageParDefaut = 'https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=600';
     ?>
     <div class="mb-5">
         <h2 class="fw-bold mb-2"><?= htmlspecialchars($titre) ?></h2>
@@ -69,8 +68,11 @@ function afficherSectionSports(array $sports, string $titre, string $description
                 <?php foreach ($sports as $sport): ?>
                     <div class="col-md-4 mb-4 animate__animated animate__fadeIn">
                         <div class="sport-card">
-                            <img src="<?= !empty($sport['image']) ? htmlspecialchars($sport['image']) : $imageParDefaut ?>"
-                                 alt="<?= htmlspecialchars($sport['name']) ?>">
+                            <?php if (!empty($sport['image'])): ?>
+                                <img src="<?= htmlspecialchars($sport['image']) ?>" alt="<?= htmlspecialchars($sport['name']) ?>">
+                            <?php else: ?>
+                                <div class="card-placeholder"><i class="fas fa-dumbbell"></i></div>
+                            <?php endif; ?>
 
                             <div class="sport-card-body">
                                 <p class="sport-date mb-2">
@@ -109,9 +111,9 @@ function afficherSectionSports(array $sports, string $titre, string $description
                                 </div>
 
                                 <div class="modal-body">
-                                    <img src="<?= !empty($sport['image']) ? htmlspecialchars($sport['image']) : $imageParDefaut ?>"
-                                         class="img-fluid rounded mb-3"
-                                         alt="<?= htmlspecialchars($sport['name']) ?>">
+                                    <?php if (!empty($sport['image'])): ?>
+                                        <img src="<?= htmlspecialchars($sport['image']) ?>" class="img-fluid rounded mb-3" alt="<?= htmlspecialchars($sport['name']) ?>">
+                                    <?php endif; ?>
 
                                     <p><strong>Date :</strong>
                                         <?= date('d/m/Y', strtotime($sport['activity_date'])) ?>
