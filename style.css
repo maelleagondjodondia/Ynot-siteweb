@@ -3,9 +3,9 @@
    ═══════════════════════════════════════════ */
 
 :root {
-    --primary-color: #6366f1;
-    --secondary-color: #4f46e5;
-    --primary-light: #818cf8;
+    --primary-color: #093535;
+    --secondary-color: #093535;
+    --primary-light: #ffffff;
     --dark: #0f172a;
     --text: #334155;
     --text-light: #64748b;
@@ -16,7 +16,19 @@
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
     --shadow-md: 0 4px 20px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06);
     --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
-    --gradient-purple: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+    --gradient-purple: linear-gradient(135deg, #2c5b5a, #093535, #093535);
+}
+body.index {
+  --gradient-purple: linear-gradient(135deg, #2c5b5a, #093535, #093535);
+}
+
+/* Autres pages */
+body.sports {
+  --gradient-purple: linear-gradient(135deg, #f6d99e, #f6d99e, #f6d99e);
+}
+
+body.partenaires {
+  --gradient-purple: linear-gradient(135deg, #a14630, #a14630, #a14630);
 }
 
 * { box-sizing: border-box; }
