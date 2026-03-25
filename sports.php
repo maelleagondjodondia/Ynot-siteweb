@@ -5,25 +5,148 @@ require_once 'includes/header.php';
 // Recherche & tri
 $search = $_GET['search'] ?? '';
 $sort   = $_GET['sort'] ?? 'activity_date';
+$today  = date('Y-m-d');
 
-$query = "SELECT * FROM activities 
-          WHERE pole = 'sport'
-          AND (name LIKE :search OR description LIKE :search)";
-
+// Tri
 switch ($sort) {
     case 'name':
-        $query .= " ORDER BY name ASC";
+        $orderUpcoming = " ORDER BY name ASC";
+        $orderPast     = " ORDER BY name ASC";
         break;
+
     case 'price':
-        $query .= " ORDER BY price ASC";
+        $orderUpcoming = " ORDER BY price ASC";
+        $orderPast     = " ORDER BY price ASC";
         break;
+
     default:
-        $query .= " ORDER BY activity_date ASC";
+        $orderUpcoming = " ORDER BY activity_date ASC";
+        $orderPast     = " ORDER BY activity_date DESC";
+        break;
 }
 
-$stmt = $db->prepare($query);
-$stmt->execute(['search' => "%$search%"]);
-$sports = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Sports à venir
+$queryUpcoming = "SELECT * FROM activities
+                  WHERE pole = 'sport'
+                  AND activity_date >= :today
+                  AND (name LIKE :search OR description LIKE :search)"
+                  . $orderUpcoming;
+
+$stmt = $db->prepare($queryUpcoming);
+$stmt->execute([
+    'today'  => $today,
+    'search' => "%$search%"
+]);
+$sportsAVenir = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Sports passés
+$queryPast = "SELECT * FROM activities
+              WHERE pole = 'sport'
+              AND activity_date < :today
+              AND (name LIKE :search OR description LIKE :search)"
+              . $orderPast;
+
+$stmt = $db->prepare($queryPast);
+$stmt->execute([
+    'today'  => $today,
+    'search' => "%$search%"
+]);
+$sportsPasses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+/**
+ * Affiche une section de sports
+ */
+function afficherSectionSports(array $sports, string $titre, string $description, string $emptyTitle, string $emptyText): void
+{
+    $imageParDefaut = 'https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=600';
+    ?>
+    <div class="mb-5">
+        <h2 class="fw-bold mb-2"><?= htmlspecialchars($titre) ?></h2>
+        <p class="text-muted mb-4"><?= htmlspecialchars($description) ?></p>
+
+        <?php if (!empty($sports)): ?>
+            <div class="row">
+                <?php foreach ($sports as $sport): ?>
+                    <div class="col-md-4 mb-4 animate__animated animate__fadeIn">
+                        <div class="sport-card">
+                            <img src="<?= !empty($sport['image']) ? htmlspecialchars($sport['image']) : $imageParDefaut ?>"
+                                 alt="<?= htmlspecialchars($sport['name']) ?>">
+
+                            <div class="sport-card-body">
+                                <p class="sport-date mb-2">
+                                    <i class="fas fa-calendar"></i>
+                                    <?= date('d/m/Y', strtotime($sport['activity_date'])) ?>
+                                </p>
+
+                                <h5 class="fw-bold mb-3">
+                                    <?= htmlspecialchars($sport['name']) ?>
+                                </h5>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="sport-price">
+                                        <?= $sport['price'] > 0 ? number_format($sport['price'], 2) . ' €' : 'Gratuit' ?>
+                                    </span>
+
+                                    <button class="btn btn-see-more"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#sportModal<?= (int)$sport['id'] ?>">
+                                        Voir plus <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="sportModal<?= (int)$sport['id'] ?>" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold">
+                                        <?= htmlspecialchars($sport['name']) ?>
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <img src="<?= !empty($sport['image']) ? htmlspecialchars($sport['image']) : $imageParDefaut ?>"
+                                         class="img-fluid rounded mb-3"
+                                         alt="<?= htmlspecialchars($sport['name']) ?>">
+
+                                    <p><strong>Date :</strong>
+                                        <?= date('d/m/Y', strtotime($sport['activity_date'])) ?>
+                                    </p>
+
+                                    <p><strong>Prix :</strong>
+                                        <?= $sport['price'] > 0 ? number_format($sport['price'], 2) . ' €' : 'Gratuit' ?>
+                                    </p>
+
+                                    <hr>
+
+                                    <h6 class="fw-bold">Description</h6>
+                                    <p><?= nl2br(htmlspecialchars($sport['description'])) ?></p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                        Fermer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center animate__animated animate__fadeIn">
+                <i class="fas fa-calendar-times fa-3x mb-3"></i>
+                <h3><?= htmlspecialchars($emptyTitle) ?></h3>
+                <p class="text-muted"><?= htmlspecialchars($emptyText) ?></p>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php
+}
 ?>
 
 <!-- Page Header -->
@@ -78,87 +201,23 @@ $sports = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!-- Liste des sports -->
 <div class="container pb-5">
-<?php if ($sports): ?>
-    <div class="row">
-        <?php foreach ($sports as $sport): ?>
-            <div class="col-md-4 mb-4 animate__animated animate__fadeIn">
-                <div class="sport-card">
-                    <img src="<?= $sport['image'] ?: 'https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=600' ?>"
-                         alt="<?= htmlspecialchars($sport['name']) ?>">
+    <?php
+    afficherSectionSports(
+        $sportsAVenir,
+        'Les sports à venir',
+        'Retrouvez ici tous les événements sportifs qui auront lieu prochainement.',
+        'Aucun sport à venir',
+        'Revenez plus tard.'
+    );
 
-                    <div class="sport-card-body">
-                        <p class="sport-date mb-2">
-                            <i class="fas fa-calendar"></i>
-                            <?= date('d/m/Y', strtotime($sport['activity_date'])) ?>
-                        </p>
-
-                        <h5 class="fw-bold mb-3">
-                            <?= htmlspecialchars($sport['name']) ?>
-                        </h5>
-
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="sport-price">
-                                <?= $sport['price'] > 0 ? number_format($sport['price'], 2) . ' €' : 'Gratuit' ?>
-                            </span>
-
-                            <button class="btn btn-see-more"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#sportModal<?= $sport['id'] ?>">
-                                Voir plus <i class="fas fa-arrow-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal -->
-            <div class="modal fade" id="sportModal<?= $sport['id'] ?>" tabindex="-1">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title fw-bold">
-                                <?= htmlspecialchars($sport['name']) ?>
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <img src="<?= $sport['image'] ?: 'https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=600' ?>"
-                                 class="img-fluid rounded mb-3"
-                                 alt="<?= htmlspecialchars($sport['name']) ?>">
-
-                            <p><strong>Date :</strong>
-                                <?= date('d/m/Y', strtotime($sport['activity_date'])) ?>
-                            </p>
-
-                            <p><strong>Prix :</strong>
-                                <?= $sport['price'] > 0 ? number_format($sport['price'], 2) . ' €' : 'Gratuit' ?>
-                            </p>
-
-                            <hr>
-
-                            <h6 class="fw-bold">Description</h6>
-                            <p><?= nl2br(htmlspecialchars($sport['description'])) ?></p>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">
-                                Fermer
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        <?php endforeach; ?>
-    </div>
-<?php else: ?>
-    <div class="text-center animate__animated animate__fadeIn">
-        <i class="fas fa-calendar-times fa-3x mb-3"></i>
-        <h3>Aucun sport trouvé</h3>
-        <p class="text-muted">Revenez plus tard.</p>
-    </div>
-<?php endif; ?>
+    afficherSectionSports(
+        $sportsPasses,
+        'Les sports passés',
+        'Retrouvez ici les événements sportifs qui ont déjà eu lieu.',
+        'Aucun sport passé',
+        'Aucun ancien événement sportif à afficher.'
+    );
+    ?>
 </div>
 
 <?php require_once 'includes/footer.php'; ?>
