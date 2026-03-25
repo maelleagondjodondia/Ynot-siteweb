@@ -18,17 +18,24 @@
     --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
     --gradient-purple: linear-gradient(135deg, #2c5b5a, #093535, #093535);
 }
+/* Accueil = bleu */
 body.index {
+  --gradient-purple: linear-gradient(135deg, #5bd4f0, #48CAE4, #3ab8d2);
+}
+
+/* Sports = jaune */
+body.sports {
+  --gradient-purple: linear-gradient(135deg, #fde76a, #FCDF4A, #f5d430);
+}
+
+/* Événements = vert (par défaut) */
+body.evenements {
   --gradient-purple: linear-gradient(135deg, #2c5b5a, #093535, #093535);
 }
 
-/* Autres pages */
-body.sports {
-  --gradient-purple: linear-gradient(135deg, #f6d99e, #f6d99e, #f6d99e);
-}
-
-body.partenaires {
-  --gradient-purple: linear-gradient(135deg, #a14630, #a14630, #a14630);
+/* Membres = rouge */
+body.membres {
+  --gradient-purple: linear-gradient(135deg, #e8604d, #e14630, #c93d29);
 }
 
 * { box-sizing: border-box; }
