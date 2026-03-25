@@ -98,7 +98,7 @@ $evenements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="event-price">
-                                <?= number_format($event['price'], 2) ?> €
+                                <?= $event['price'] > 0 ? number_format($event['price'], 2) . ' €' : 'Gratuit' ?>
                             </span>
 
                             <button class="btn btn-see-more"
@@ -132,7 +132,7 @@ $evenements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </p>
 
                             <p><strong>Prix :</strong>
-                                <?= number_format($event['price'], 2) ?> €
+                                <?= $event['price'] > 0 ? number_format($event['price'], 2) . ' €' : 'Gratuit' ?>
                             </p>
 
                             <hr>

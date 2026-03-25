@@ -83,7 +83,7 @@ $sports = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach ($sports as $sport): ?>
             <div class="col-md-4 mb-4 animate__animated animate__fadeIn">
                 <div class="sport-card">
-                    <img src="<?= $sport['image'] ?: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30' ?>"
+                    <img src="<?= $sport['image'] ?: 'https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=600' ?>"
                          alt="<?= htmlspecialchars($sport['name']) ?>">
 
                     <div class="sport-card-body">
@@ -98,7 +98,7 @@ $sports = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="sport-price">
-                                <?= number_format($sport['price'], 2) ?> €
+                                <?= $sport['price'] > 0 ? number_format($sport['price'], 2) . ' €' : 'Gratuit' ?>
                             </span>
 
                             <button class="btn btn-see-more"
@@ -123,7 +123,7 @@ $sports = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
 
                         <div class="modal-body">
-                            <img src="<?= $sport['image'] ?: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30' ?>"
+                            <img src="<?= $sport['image'] ?: 'https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=600' ?>"
                                  class="img-fluid rounded mb-3"
                                  alt="<?= htmlspecialchars($sport['name']) ?>">
 
@@ -132,7 +132,7 @@ $sports = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </p>
 
                             <p><strong>Prix :</strong>
-                                <?= number_format($sport['price'], 2) ?> €
+                                <?= $sport['price'] > 0 ? number_format($sport['price'], 2) . ' €' : 'Gratuit' ?>
                             </p>
 
                             <hr>

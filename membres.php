@@ -18,7 +18,7 @@ try {
     }
     
     // Ordre des pôles
-    $ordre_poles = ['Responsables', 'Sport', 'Événementiel', 'Communication', 'Partenaria'];
+    $ordre_poles = ['Sport', 'Evenementiel', 'Communication', 'Partenaria'];
     
 } catch(PDOException $e) {
     $membres_par_pole = [];
@@ -94,11 +94,10 @@ try {
                 <h2 class="pole-title fw-bold">
                     <?php 
                     $icon = 'fa-users';
-                    if ($pole === 'Responsables') $icon = 'fa-crown';
                     if ($pole === 'Sport') $icon = 'fa-running';
-                    if ($pole === 'Événementiel') $icon = 'fa-calendar-star';
+                    if ($pole === 'Evenementiel') $icon = 'fa-calendar-alt';
                     if ($pole === 'Communication') $icon = 'fa-bullhorn';
-                    if ($pole === 'Trésorerie') $icon = 'fa-coins';
+                    if ($pole === 'Partenaria') $icon = 'fa-handshake';
                     ?>
                     <i class="fas <?php echo $icon; ?>"></i> Pôle <?php echo htmlspecialchars($pole); ?>
                 </h2>

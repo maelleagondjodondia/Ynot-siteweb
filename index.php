@@ -46,19 +46,6 @@ require_once 'includes/header.php';
     </div>
 </section>
 
-<!-- Boutons de redirection -->
-<section class="text-center py-5 bg-light">
-    <div class="container">
-        <h3 class="mb-4">Découvrez nos activités</h3>
-        <a href="sports.php" class="btn-custom">
-            <i class="fas fa-futbol"></i> Activités Sportives
-        </a>
-        <a href="evenements.php" class="btn-custom">
-            <i class="fas fa-star"></i> Nos Événements
-        </a>
-    </div>
-</section>
-
 <!-- Partenaires (dynamique depuis la BDD) -->
 <?php $partners = $db->query("SELECT * FROM partners ORDER BY name ASC")->fetchAll(PDO::FETCH_ASSOC); ?>
 <?php if (!empty($partners)): ?>
@@ -85,25 +72,57 @@ require_once 'includes/header.php';
 <?php endif; ?>
 
 <!-- Contact -->
-<section id="contact" class="py-5">
+<section id="contact" class="contact-section">
     <div class="container">
-        <div class="col-md-8 mx-auto text-center">
-            <h2 class="mb-4">Contactez-nous</h2>
-            <p class="lead mb-4">Une question ? Une suggestion ? N'hésitez pas à nous contacter !</p>
-            <p>
-                <i class="fas fa-envelope me-2"></i> bde@ecole.fr<br>
-                <i class="fas fa-phone me-2"></i> 01 23 45 67 89
-            </p>
-            <div class="mt-4">
-                <a href="#" class="btn btn-outline-primary btn-lg me-2">
-                    <i class="fab fa-facebook"></i>
-                </a>
-                <a href="#" class="btn btn-outline-info btn-lg me-2">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="btn btn-outline-dark btn-lg">
-                    <i class="fab fa-twitter"></i>
-                </a>
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <h2 class="text-center fw-bold mb-2">Contactez-nous</h2>
+                <p class="text-center text-muted mb-5">Une question ? Une suggestion ? On est là pour vous !</p>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="contact-card text-center">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h6 class="fw-bold">Email</h6>
+                            <a href="mailto:bde@ecole.fr" class="text-muted">bde@ecole.fr</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="contact-card text-center">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <h6 class="fw-bold">Téléphone</h6>
+                            <a href="tel:0123456789" class="text-muted">01 23 45 67 89</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="contact-card text-center">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h6 class="fw-bold">Adresse</h6>
+                            <span class="text-muted">Campus universitaire</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <p class="fw-bold mb-3">Suivez-nous sur les réseaux</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank" class="social-btn social-facebook" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="social-btn social-instagram" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" class="social-btn social-twitter" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

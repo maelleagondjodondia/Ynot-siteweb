@@ -98,7 +98,66 @@ body {
     transform: translateY(-1px);
 }
 
-.navbar-toggler { border: 1px solid rgba(255,255,255,0.2); }
+/* ── Navbar scrolled state ── */
+.navbar.scrolled {
+    background: rgba(15, 23, 42, 0.98);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    padding: 0.5rem 0;
+}
+
+/* ── Active nav link ── */
+.navbar .nav-link.active {
+    color: #fff !important;
+    background: rgba(255,255,255,0.12);
+    border-bottom: 2px solid var(--primary-light);
+}
+
+/* ── Hamburger toggle ── */
+.navbar-toggler {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.8);
+    font-size: 1.2rem;
+    padding: 6px 10px;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(9,53,53,0.3);
+}
+
+/* ── Scroll to top button ── */
+.scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--gradient-purple);
+    color: white;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 4px 15px rgba(9,53,53,0.3);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-top:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(9,53,53,0.4);
+}
 
 /* ── Subtle SVG pattern overlay ── */
 .hero-section::before,
@@ -370,42 +429,90 @@ body {
 .partner-logo:hover i { transform: scale(1.15); }
 
 /* ── Contact Section ── */
-#contact {
-    padding: 80px 0;
-    background: var(--bg);
+.contact-section {
+    padding: 90px 0;
+    background: var(--white);
+    border-top: 1px solid #f1f5f9;
 }
 
-#contact h2 {
+.contact-section h2 {
     font-weight: 800;
     color: var(--dark);
     letter-spacing: -0.5px;
 }
 
-#contact .lead { color: var(--text-light); }
-#contact p i { color: var(--primary-color); }
-
-#contact .btn {
-    border-radius: var(--radius-sm);
-    padding: 12px 20px;
-    transition: all 0.3s;
+.contact-card {
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 35px 25px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.35s cubic-bezier(.4,0,.2,1);
 }
 
-#contact .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(9,53,53,0.2);
 }
 
-/* ── Activities Discovery ── */
-.bg-light {
-    background: var(--white) !important;
-    border-top: 1px solid #f1f5f9;
-    border-bottom: 1px solid #f1f5f9;
+.contact-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--gradient-purple);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin: 0 auto 16px;
+    transition: transform 0.3s;
 }
 
-.bg-light h3 {
-    font-weight: 700;
-    color: var(--dark);
+.contact-card:hover .contact-icon {
+    transform: scale(1.1) rotate(-5deg);
 }
+
+.contact-card a {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.contact-card a:hover {
+    color: var(--primary-color) !important;
+}
+
+/* ── Social Buttons ── */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+.social-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    text-decoration: none;
+}
+
+.social-btn:hover {
+    transform: translateY(-4px);
+    color: white;
+}
+
+.social-facebook { background: #1877f2; }
+.social-facebook:hover { box-shadow: 0 6px 20px rgba(24,119,242,0.4); }
+.social-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.social-instagram:hover { box-shadow: 0 6px 20px rgba(225,48,108,0.4); }
+.social-twitter { background: #1da1f2; }
+.social-twitter:hover { box-shadow: 0 6px 20px rgba(29,161,242,0.4); }
 
 /* ── Placeholders ── */
 .no-events, .no-sports {
@@ -691,7 +798,8 @@ footer {
     .partner-logo { padding: 18px 12px; margin: 6px; }
 
     /* Contact */
-    #contact { padding: 50px 0; }
+    .contact-section { padding: 50px 0; }
+    .contact-card { padding: 25px 18px; }
 
     /* Buttons */
     .btn-custom { padding: 12px 24px; font-size: 0.9rem; }
