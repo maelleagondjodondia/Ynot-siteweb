@@ -1,3 +1,5 @@
 *.sb-*
 uploads/*
 !uploads/.htaccess
+ScreenRecording*.mov
+*.mov
