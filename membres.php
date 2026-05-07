@@ -2,12 +2,10 @@
 require_once 'includes/db.php';
 require_once 'includes/header.php';
 
-// Récupération de tous les membres groupés par pôle
 try {
     $stmt = $db->query("SELECT * FROM members ORDER BY name ASC");
     $tous_membres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Grouper par pôle
+
     $membres_par_pole = [];
     foreach ($tous_membres as $membre) {
         $pole = $membre['pole'];
@@ -16,10 +14,9 @@ try {
         }
         $membres_par_pole[$pole][] = $membre;
     }
-    
-    // Ordre des pôles
+
     $ordre_poles = ['Sport', 'Evenementiel', 'Communication', 'Partenaria'];
-    
+
 } catch(PDOException $e) {
     $membres_par_pole = [];
     $tous_membres = [];
@@ -27,7 +24,13 @@ try {
 ?>
 
 <!-- Page Header -->
-<section class="page-header animate__animated animate__fadeIn">
+<section class="page-header">
+    <div class="hero-blobs">
+        <span class="blob blob-1"></span>
+        <span class="blob blob-2"></span>
+    </div>
+    <i class="fas fa-users floating-shape s-1"></i>
+    <i class="fas fa-star floating-shape s-3"></i>
     <div class="container">
         <h1 class="display-4 fw-bold">
             Bureau Des Étudiants
@@ -40,19 +43,20 @@ try {
 <?php if (count($tous_membres) > 0): ?>
 <section class="carousel-section">
     <div class="container">
-        <h3 class="text-center mb-4 fw-bold">Notre Équipe Complète</h3>
-        <div id="membersCarousel" class="carousel slide" data-bs-ride="carousel">
+        <h3 class="text-center mb-4 fw-bold reveal">Notre Équipe Complète</h3>
+        <div id="membersCarousel" class="carousel slide reveal" data-bs-ride="carousel">
             <div class="carousel-inner">
-                <?php 
-                $chunks = array_chunk($tous_membres, 5); // 5 membres par slide
-                foreach ($chunks as $index => $chunk): 
+                <?php
+                $chunks = array_chunk($tous_membres, 5);
+                foreach ($chunks as $index => $chunk):
                 ?>
                     <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
                         <div class="row justify-content-center">
                             <?php foreach ($chunk as $membre): ?>
                                 <div class="col-md-2 col-6 text-center mb-3">
-                                    <img src="<?php echo $membre['image'] ?: 'https://ui-avatars.com/api/?name=' . urlencode($membre['name']) . '&size=150&background=2563eb&color=fff'; ?>" 
-                                         class="img-fluid" 
+                                    <img src="<?php echo $membre['image'] ?: 'https://ui-avatars.com/api/?name=' . urlencode($membre['name']) . '&size=150&background=2563eb&color=fff'; ?>"
+                                         class="img-fluid"
+                                         loading="lazy"
                                          alt="<?php echo htmlspecialchars($membre['name']); ?>">
                                     <p class="mt-2 mb-0 fw-bold"><?php echo htmlspecialchars($membre['name']); ?></p>
                                     <small class="text-muted"><?php echo htmlspecialchars($membre['role']); ?></small>
@@ -78,8 +82,7 @@ try {
 <!-- Sections par pôle -->
 <div class="container pb-5">
     <?php if (count($membres_par_pole) > 0): ?>
-        <?php 
-        // Trier les pôles selon l'ordre défini
+        <?php
         uksort($membres_par_pole, function($a, $b) use ($ordre_poles) {
             $pos_a = array_search($a, $ordre_poles);
             $pos_b = array_search($b, $ordre_poles);
@@ -87,12 +90,12 @@ try {
             if ($pos_b === false) $pos_b = 999;
             return $pos_a - $pos_b;
         });
-        
-        foreach ($membres_par_pole as $pole => $membres): 
+
+        foreach ($membres_par_pole as $pole => $membres):
         ?>
-            <div class="pole-section animate__animated animate__fadeIn">
+            <div class="pole-section reveal">
                 <h2 class="pole-title fw-bold">
-                    <?php 
+                    <?php
                     $icon = 'fa-users';
                     if ($pole === 'Sport') $icon = 'fa-running';
                     if ($pole === 'Evenementiel') $icon = 'fa-calendar-alt';
@@ -101,13 +104,14 @@ try {
                     ?>
                     <i class="fas <?php echo $icon; ?>"></i> Pôle <?php echo htmlspecialchars($pole); ?>
                 </h2>
-                
+
                 <div class="row">
-                    <?php foreach ($membres as $membre): ?>
-                        <div class="col-md-3 col-sm-6">
+                    <?php foreach ($membres as $i => $membre): ?>
+                        <div class="col-md-3 col-sm-6 reveal delay-<?= ($i % 4) + 1 ?>">
                             <div class="member-card">
-                                <img src="<?php echo $membre['image'] ?: 'https://ui-avatars.com/api/?name=' . urlencode($membre['name']) . '&size=120&background=2563eb&color=fff'; ?>" 
-                                     class="member-photo" 
+                                <img src="<?php echo $membre['image'] ?: 'https://ui-avatars.com/api/?name=' . urlencode($membre['name']) . '&size=120&background=2563eb&color=fff'; ?>"
+                                     class="member-photo"
+                                     loading="lazy"
                                      alt="<?php echo htmlspecialchars($membre['name']); ?>">
                                 <div class="member-name"><?php echo htmlspecialchars($membre['name']); ?></div>
                                 <div class="member-role"><?php echo htmlspecialchars($membre['role']); ?></div>
@@ -118,7 +122,7 @@ try {
             </div>
         <?php endforeach; ?>
     <?php else: ?>
-        <div class="no-members animate__animated animate__fadeIn">
+        <div class="no-members reveal">
             <i class="fas fa-users-slash"></i>
             <h3>Aucun membre enregistré</h3>
             <p class="text-muted">Les membres du BDE seront bientôt présentés ici.</p>

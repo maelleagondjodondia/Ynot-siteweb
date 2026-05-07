@@ -14,7 +14,6 @@ $page_titles = [
 ];
 $page_title = ($page_titles[$current] ?? 'Page') . ' — BDE Ynot';
 
-// Classe body par page (pour les gradients différents)
 $body_classes = [
     'index.php' => 'index',
     'sports.php' => 'sports',
@@ -34,13 +33,33 @@ $body_class = $body_classes[$current] ?? '';
     <title><?= $page_title ?></title>
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+
+    <!-- Init thème AVANT le rendu pour éviter le flash -->
+    <script>
+    (function () {
+        try {
+            var saved = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var theme = saved || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+    })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, html { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        h1, h2, h3, h4, h5, h6, .display-1, .display-2, .display-3, .display-4, .display-5, .display-6, .navbar-brand {
+            font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-style: normal;
+        }
+    </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
-    <!-- CSS global -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="<?= $body_class ?>">
@@ -74,6 +93,13 @@ $body_class = $body_classes[$current] ?? '';
                             <i class="fas fa-user-shield"></i> Espace Admin
                         </a>
                     <?php endif; ?>
+                </li>
+
+                <li class="nav-item">
+                    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Basculer le thème">
+                        <i class="icon-moon fas fa-moon"></i>
+                        <i class="icon-sun fas fa-sun"></i>
+                    </button>
                 </li>
             </ul>
         </div>
